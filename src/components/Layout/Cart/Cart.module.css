@@ -44,3 +44,8 @@
   background-color: #8a2b06;
   color: white;
 }
+
+.actions .button:disabled {
+  background-color: #c5c5c5;
+  border: #c5c5c5;
+}
