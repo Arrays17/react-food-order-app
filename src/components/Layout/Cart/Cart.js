@@ -9,6 +9,9 @@ import CheckoutForm from "./CheckoutForm";
 const Cart = (props) => {
   const cartCtx = useContext(CartContext);
   const [checkoutMode, setCheckoutMode] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [orderSubmitted, setOrderSubmitted] = useState(false);
+
   const nameRef = useRef("");
   const streetRef = useRef("");
   const cityRef = useRef("");
@@ -50,8 +53,9 @@ const Cart = (props) => {
     });
   };
 
-  const submitOrder = (userData) => {
-    fetch(
+  const submitOrder = async (userData) => {
+    setIsSubmitting(true);
+    await fetch(
       "https://practiceproject-foodorderapp-default-rtdb.asia-southeast1.firebasedatabase.app/orders.json",
       {
         method: "POST",
@@ -61,6 +65,9 @@ const Cart = (props) => {
         }),
       }
     );
+    setIsSubmitting(false);
+    setOrderSubmitted(true);
+    cartCtx.clearCart();
   };
 
   const checkoutHandler = () => {
@@ -69,7 +76,6 @@ const Cart = (props) => {
     if (!formData.isValid) return;
 
     submitOrder(formData.userData);
-    //console.log(isFormValid);
   };
 
   const validateForm = () => {
@@ -90,7 +96,6 @@ const Cart = (props) => {
     let errorCounter = 0;
 
     for (const key in isValid) {
-      console.log(key, isValid[key].trim() === "");
       if (isValid[key].trim() === "") {
         errorCounter++;
         setFormValidity((prevState) => {
@@ -134,8 +139,8 @@ const Cart = (props) => {
     </button>
   );
 
-  return (
-    <Modal closeFunction={props.onClose}>
+  const cartModalContent = (
+    <React.Fragment>
       {cartItems}
       <div className={css.total}>
         <span>Total Amount</span>
@@ -153,6 +158,27 @@ const Cart = (props) => {
         {cancelButton}
         {hasItems && confirmButton}
       </div>
+    </React.Fragment>
+  );
+
+  const submittingOrderModalContent = <p>Submitting Order...</p>;
+
+  const orderSubmittedModalContent = (
+    <React.Fragment>
+      <p>Order Successful!</p>
+      <div className={css.actions}>
+        <button className={css.button} onClick={props.onClose}>
+          Close
+        </button>
+      </div>
+    </React.Fragment>
+  );
+
+  return (
+    <Modal closeFunction={props.onClose}>
+      {!isSubmitting && !orderSubmitted && cartModalContent}
+      {isSubmitting && !orderSubmitted && submittingOrderModalContent}
+      {!isSubmitting && orderSubmitted && orderSubmittedModalContent}
     </Modal>
   );
 };
