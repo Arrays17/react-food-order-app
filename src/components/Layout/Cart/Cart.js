@@ -1,5 +1,6 @@
 import React, { useContext, useState, useRef } from "react";
-import CartContext from "../../../store/cart-context";
+import { useSelector, useDispatch } from "react-redux";
+import { cartActions } from "../../../store";
 
 import Modal from "../../UI/Modal";
 import css from "./Cart.module.css";
@@ -7,7 +8,8 @@ import CartItem from "./CartItem";
 import CheckoutForm from "./CheckoutForm";
 
 const Cart = (props) => {
-  const cartCtx = useContext(CartContext);
+  const cartState = useSelector((state) => state.cart);
+  const dispatch = useDispatch();
   const [checkoutMode, setCheckoutMode] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSubmitted, setOrderSubmitted] = useState(false);
@@ -23,20 +25,20 @@ const Cart = (props) => {
     postalIsValid: true,
   });
 
-  const hasItems = cartCtx.items.length > 0;
-  const totalAmount = `$${cartCtx.totalAmount.toFixed(2)}`;
+  const hasItems = cartState.items.length > 0;
+  const totalAmount = `$${cartState.totalAmount.toFixed(2)}`;
 
   const inCartAddHandler = (item) => {
-    cartCtx.addItem({ ...item, amount: 1 });
+    dispatch(cartActions.addItem({ ...item, amount: 1 }));
   };
 
-  const inCartRemoveHandler = (item) => {
-    cartCtx.removeItem(item);
+  const inCartRemoveHandler = (id) => {
+    dispatch(cartActions.removeItem(id));
   };
 
   const cartItems = (
     <ul className={css["cart-items"]}>
-      {cartCtx.items.map((item) => (
+      {cartState.items.map((item) => (
         <CartItem
           key={item.id}
           {...item}
@@ -61,13 +63,13 @@ const Cart = (props) => {
         method: "POST",
         body: JSON.stringify({
           userData: userData,
-          orderedItems: cartCtx.items,
+          orderedItems: cartState.items,
         }),
       }
     );
     setIsSubmitting(false);
     setOrderSubmitted(true);
-    cartCtx.clearCart();
+    dispatch(cartActions.clearCart());
   };
 
   const checkoutHandler = () => {
