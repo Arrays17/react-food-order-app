@@ -1,7 +1,17 @@
-.meals {
+ion-card {
   max-width: 60rem;
-  width: 90%;
-  margin: 2rem auto;
+  width: 97vw;
+  padding: 0;
+  margin: 1rem auto;
+}
+
+ion-item item-native {
+  padding-left: 0;
+}
+
+.meals {
+  max-width: 40rem;
+  width: 100%;
   animation: meals-appear 1s ease-out forwards;
 }
 

@@ -1,3 +1,4 @@
+import { IonButton } from "@ionic/react";
 import React, { useRef } from "react";
 import Input from "../../../UI/Input";
 import css from "./MealItemForm.module.css";
@@ -11,7 +12,7 @@ const MealItemForm = (props, ref) => {
     const enteredAmountNumber = +enteredAmount;
 
     if (
-      enteredAmount.trim().length === 0 ||
+      enteredAmount.toString().trim().length === 0 ||
       enteredAmountNumber < 1 ||
       enteredAmountNumber > 5
     ) {
@@ -22,19 +23,31 @@ const MealItemForm = (props, ref) => {
   };
 
   return (
-    <form className={css.form} onSubmit={submitHandler}>
+    <form
+      className={`${css.form} ion-no-padding`}
+      onSubmit={submitHandler}
+      slot="end"
+    >
       <Input
         label="Amount"
         ref={amountInputRef}
         input={{
           id: "amount" + props.id,
           type: "number",
-          min: "1",
-          max: "5",
-          defaultValue: "1",
+          min: 1,
+          max: 5,
+          defaultValue: 1,
         }}
       />
-      <button type="submit">+ Add</button>
+      <IonButton
+        type="submit"
+        shape="round"
+        disabled="false"
+        className={`${css.button}`}
+        size="medium"
+      >
+        ADD TO CART
+      </IonButton>
     </form>
   );
 };

@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setupIonicReact } from "@ionic/react";
-
-import "@ionic/react/css/core.css";
+import { IonApp, IonContent, setupIonicReact } from "@ionic/react";
 
 import Header from "./components/Layout/Header";
 import Meals from "./components/Layout/Meals/Meals";
 import Cart from "./components/Layout/Cart/Cart";
-import CartProvider from "./store/context/CartProvider";
 import { loadCartData, saveCartData } from "./store/cart";
 
 setupIonicReact();
@@ -36,13 +33,13 @@ function App() {
     cart.changed && dispatch(saveCartData(cart));
   }, [cart, dispatch]);
   return (
-    <CartProvider>
+    <IonApp>
       {cartVisible && <Cart onClose={showCartHandler} />}
       <Header showCartHandler={showCartHandler} />
-      <main>
+      <IonContent>
         <Meals />
-      </main>
-    </CartProvider>
+      </IonContent>
+    </IonApp>
   );
 }
 

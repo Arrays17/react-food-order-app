@@ -1,3 +1,4 @@
+import { IonButton, IonList } from "@ionic/react";
 import React, { useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { cartActions } from "../../../store";
@@ -37,7 +38,7 @@ const Cart = (props) => {
   };
 
   const cartItems = (
-    <ul className={css["cart-items"]}>
+    <IonList className={css["cart-items"]}>
       {cartState.items.map((item) => (
         <CartItem
           key={item.id}
@@ -46,10 +47,16 @@ const Cart = (props) => {
           onRemove={inCartRemoveHandler.bind(null, item.id)}
         />
       ))}
-    </ul>
+    </IonList>
   );
 
   const toggleCheckout = () => {
+    document.activeElement.setFormValidity({
+      nameIsValid: true,
+      cityIsValid: true,
+      streetIsValid: true,
+      postalIsValid: true,
+    });
     setCheckoutMode((prevMode) => {
       return !prevMode;
     });
@@ -78,6 +85,25 @@ const Cart = (props) => {
     if (!formData.isValid) return;
 
     submitOrder(formData.userData);
+  };
+
+  const validateInput = (inputRef) => {
+    let fieldToValidate;
+    let verdict = true;
+    if (inputRef === nameRef) fieldToValidate = "nameIsValid";
+    if (inputRef === streetRef) fieldToValidate = "streetIsValid";
+    if (inputRef === postalRef) fieldToValidate = "postalIsValid";
+    if (inputRef === cityRef) fieldToValidate = "cityIsValid";
+    if (inputRef.current.value.trim() === "") {
+      verdict = false;
+    }
+
+    return setFormValidity((prevState) => {
+      return {
+        ...prevState,
+        [fieldToValidate]: verdict,
+      };
+    });
   };
 
   const validateForm = () => {
@@ -124,21 +150,23 @@ const Cart = (props) => {
   };
 
   const cancelButton = (
-    <button
+    <IonButton
+      shape="round"
       className={css["button--alt"]}
       onClick={!checkoutMode ? props.onClose : toggleCheckout}
     >
       {checkoutMode ? "Cancel" : "Close"}
-    </button>
+    </IonButton>
   );
 
   const confirmButton = (
-    <button
+    <IonButton
+      shape="round"
       className={css.button}
       onClick={!checkoutMode ? toggleCheckout : checkoutHandler}
     >
       {checkoutMode ? "Check Out" : "Order"}
-    </button>
+    </IonButton>
   );
 
   const cartModalContent = (
@@ -153,7 +181,7 @@ const Cart = (props) => {
           onCancel={toggleCheckout}
           ref={{ nameRef, streetRef, postalRef, cityRef }}
           {...FormValidity}
-          onInputBlur={validateForm}
+          onInputBlur={validateInput}
         />
       )}
       <div className={css.actions}>
@@ -169,9 +197,9 @@ const Cart = (props) => {
     <React.Fragment>
       <p>Order Successful!</p>
       <div className={css.actions}>
-        <button className={css.button} onClick={props.onClose}>
+        <IonButton className={css.button} onClick={props.onClose}>
           Close
-        </button>
+        </IonButton>
       </div>
     </React.Fragment>
   );

@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { IonBadge, IonButton, IonIcon } from "@ionic/react";
+import { cart as cartIcon } from "ionicons/icons";
 
 import css from "./HeaderCartButton.module.css";
-import CartIcon from "../Layout/Cart/CartIcon";
 
 const HeaderCartButton = (props) => {
   const [bumpBtn, setBumpBtn] = useState(false);
@@ -25,13 +26,15 @@ const HeaderCartButton = (props) => {
   const bumpBtnClass = `${css.button} ${bumpBtn ? css.bump : ""}`;
 
   return (
-    <button onClick={props.onClick} className={bumpBtnClass}>
-      <span className={css.icon}>
-        <CartIcon />
-      </span>
-      <span>My Cart</span>
-      <span className={css.badge}>{numberOfItems}</span>
-    </button>
+    <IonButton
+      className={bumpBtnClass}
+      onClick={props.onClick}
+      shape="round"
+      slot="end"
+    >
+      <IonIcon slot="start" icon={cartIcon} />
+      <IonBadge className={css.badge}>{numberOfItems}</IonBadge>
+    </IonButton>
   );
 };
 

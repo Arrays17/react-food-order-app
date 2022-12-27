@@ -11,22 +11,19 @@
   justify-content: space-between;
   align-items: center;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin: 1rem 0;
 }
 
 .actions {
   text-align: right;
+  flex-direction: row;
 }
 
-.actions button {
-  font: inherit;
-  cursor: pointer;
-  background-color: transparent;
-  border: 1px solid #8a2b06;
-  padding: 0.5rem 2rem;
-  border-radius: 25px;
-  margin-left: 1rem;
+.actions .button {
+  background: transparent;
+  --border-radius: 25px;
+  margin-left: 10px;
 }
 
 .actions button:hover,
@@ -37,15 +34,29 @@
 }
 
 .actions .button--alt {
-  color: #8a2b06;
+  --background: transparent;
+  --background-hover: #e5e5e5;
+  border: 1px solid #5a1a01;
+  border-radius: 25px;
+  --color: #8a2b06;
 }
 
 .actions .button {
-  background-color: #8a2b06;
+  --background: #8a2b06;
+  --background-hover: #5a1a01;
   color: white;
 }
 
-.actions .button:disabled {
-  background-color: #c5c5c5;
-  border: #c5c5c5;
+@media (max-width: 768px) {
+  .cart-items {
+    max-height: 30vh;
+  }
+
+  .cart-items h3 {
+    font-size: 1rem;
+  }
+
+  .total {
+    font-size: 1rem;
+  }
 }

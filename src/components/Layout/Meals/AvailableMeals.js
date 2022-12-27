@@ -1,7 +1,7 @@
-import Card from "../../UI/Card";
 import MealItem from "./MealItem/MealItem";
 import css from "./AvailableMeals.module.css";
 import { useEffect, useState } from "react";
+import { IonCard, IonCardContent, IonList } from "@ionic/react";
 
 const AvailableMeals = () => {
   const [meals, setMeals] = useState([]);
@@ -13,7 +13,8 @@ const AvailableMeals = () => {
       setIsFetchingData(true);
       const fetchResponse = await fetch(
         "https://practiceproject-foodorderapp-default-rtdb.asia-southeast1.firebasedatabase.app/meals.json"
-      ).catch(() => {
+      ).catch((error) => {
+        console.log(error);
         throw new Error("Something went wrong.");
       });
 
@@ -44,15 +45,15 @@ const AvailableMeals = () => {
   const statusText = errorMsg !== null ? errorMsg : "Loading...";
 
   return (
-    <section className={css.meals}>
-      <Card>
+    <IonCard>
+      <IonCardContent>
         {!isFetchingData && !errorMsg ? (
-          <ul className={css.ul}>{mealsList}</ul>
+          <IonList className={`${css.ul} ion-no-padding`}>{mealsList}</IonList>
         ) : (
           <p style={{ textAlign: "center" }}>{statusText}</p>
         )}
-      </Card>
-    </section>
+      </IonCardContent>
+    </IonCard>
   );
 };
 

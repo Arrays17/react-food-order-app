@@ -1,67 +1,82 @@
+import { IonInput, IonItem, IonLabel, IonList, IonNote } from "@ionic/react";
 import React from "react";
 
 import css from "./Checkout.module.css";
 
 const CheckoutForm = React.forwardRef((props, ref) => {
+  const { nameRef, streetRef, postalRef, cityRef } = ref;
+  const { nameIsValid, streetIsValid, postalIsValid, cityIsValid } = props;
+  const validateInput = (ref) => {
+    props.onInputBlur(ref);
+  };
+
+  console.log(document.activeElement);
+
   return (
-    <form>
-      <div className={`${css.control} ${!props.nameIsValid && css.invalid}`}>
-        <label htmlFor="name">Your name</label>
-        <input
+    <IonList className={css.form}>
+      <IonItem
+        className={`${css.control} ${!nameIsValid && "ion-invalid"} `}
+        fill="outline"
+      >
+        <IonLabel htmlFor="name" position="stacked" className={css.label}>
+          Your name
+        </IonLabel>
+        <IonInput
           type="text"
           id="name"
           ref={ref.nameRef}
-          onBlur={props.onInputBlur}
+          onIonBlur={() => validateInput(nameRef)}
+          autofocus={true}
         />
-        {!props.nameIsValid && (
-          <p style={{ color: "red", fontSize: ".7rem", marginTop: 0 }}>
-            Name is required.
-          </p>
-        )}
-      </div>
-      <div className={`${css.control} ${!props.streetIsValid && css.invalid}`}>
-        <label htmlFor="street">Street</label>
-        <input
+        <IonNote slot="error">Name is required</IonNote>
+      </IonItem>
+
+      <IonItem
+        className={`${css.control} ${!streetIsValid && "ion-invalid"} `}
+        fill="outline"
+      >
+        <IonLabel htmlFor="street" position="stacked">
+          Street
+        </IonLabel>
+        <IonInput
           type="text"
           id="street"
           ref={ref.streetRef}
-          onBlur={props.onInputBlur}
+          onIonBlur={() => validateInput(streetRef)}
         />
-        {!props.streetIsValid && (
-          <p style={{ color: "red", fontSize: ".7rem", marginTop: 0 }}>
-            Street is required.
-          </p>
-        )}
-      </div>
-      <div className={`${css.control} ${!props.postalIsValid && css.invalid}`}>
-        <label htmlFor="postal">Postal</label>
-        <input
+        <IonNote slot="error">Street is required</IonNote>
+      </IonItem>
+      <IonItem
+        className={`${css.control} ${!postalIsValid && "ion-invalid"} `}
+        fill="outline"
+      >
+        <IonLabel position="stacked" htmlFor="postal">
+          Postal
+        </IonLabel>
+        <IonInput
           type="text"
           id="postal"
           ref={ref.postalRef}
-          onBlur={props.onInputBlur}
+          onIonBlur={() => validateInput(postalRef)}
         />
-        {!props.postalIsValid && (
-          <p style={{ color: "red", fontSize: ".7rem", marginTop: 0 }}>
-            Postal is required.
-          </p>
-        )}
-      </div>
-      <div className={`${css.control} ${!props.cityIsValid && css.invalid}`}>
-        <label htmlFor="city">City</label>
-        <input
+        <IonNote slot="error">Postal is required</IonNote>
+      </IonItem>
+      <IonItem
+        className={`${css.control} ${!cityIsValid && "ion-invalid"} `}
+        fill="outline"
+      >
+        <IonLabel position="stacked" htmlFor="city">
+          City
+        </IonLabel>
+        <IonInput
           type="text"
           id="city"
           ref={ref.cityRef}
-          onBlur={props.onInputBlur}
+          onIonBlur={() => validateInput(cityRef)}
         />
-        {!props.cityIsValid && (
-          <p style={{ color: "red", fontSize: ".7rem", marginTop: 0 }}>
-            City is required.
-          </p>
-        )}
-      </div>
-    </form>
+        <IonNote slot="error">City is required</IonNote>
+      </IonItem>
+    </IonList>
   );
 });
 
